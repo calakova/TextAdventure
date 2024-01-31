@@ -17,6 +17,8 @@ public class Move implements Runnable {
         System.out.println("Which direction do you want to go in?\n" +
                 "Available directions: " + directions);
         String input = scanner.nextLine();
+        System.out.println();
+
         Room nextRoom = game.getCurrentRoom().getExits().get(input);
         game.setCurrentRoom(nextRoom);
     }

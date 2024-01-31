@@ -3,8 +3,6 @@ package at.bbrz;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -14,17 +12,16 @@ public class Game {
     @Getter
     private Player player;
     private CommandHandler commandHandler;
+    @Setter
+    private boolean gameRunning = true;
     private final Scanner scanner = new Scanner(System.in);
-
-    public Game() {
-        init();
-    }
 
     private void askForEnter() {
         System.out.println("Press Enter to start the game!");
         scanner.nextLine();
     }
 
+    // TODO: Refactor the code within this method into separate smaller methods
     public void init() {
         askForEnter();
 
@@ -59,10 +56,12 @@ public class Game {
         System.out.println(currentRoom.getName());
         System.out.println(currentRoom.getDescription());
         System.out.println("What do you want to do?");
-        System.out.println();
         String input = scanner.nextLine();
+        System.out.println();
         commandHandler.setCommand(input);
         commandHandler.runCommand();
-        run();
+        if (this.gameRunning) {
+            run();
+        }
     }
 }

@@ -12,6 +12,7 @@ public class CommandHandler {
 
     public CommandHandler(Game game) {
         commands.put("move", new Move(game));
+        commands.put("exit", new Exit(game));
     }
 
     public void runCommand() {
