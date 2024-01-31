@@ -1,12 +1,24 @@
 package at.bbrz;
 
+import lombok.Setter;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHandler {
-    private String input;
-    private Map<String, Runnable> commands = Map.of(
-            "move", new Move()
-    );
+    @Setter
+    private String command;
+    private final Map<String, Runnable> commands = new HashMap<>();
 
-    //TODO: foreach that checks if input has corresponding command in commands Map
+    public CommandHandler(Game game) {
+        commands.put("move", new Move(game));
+    }
+
+    public void runCommand() {
+        if (commands.containsKey(command)) {
+            commands.get(command).run();
+        } else {
+            System.out.println("Invalid command!");
+        }
+    }
 }

@@ -3,30 +3,41 @@ package at.bbrz;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-@Getter
 public class Game {
+    @Getter
     @Setter
     private Room currentRoom;
+    @Getter
     private Player player;
-    private Scanner scanner = new Scanner(System.in);
+    private CommandHandler commandHandler;
+    private final Scanner scanner = new Scanner(System.in);
 
     public Game() {
         init();
-        askForEnter();
-        run();
     }
 
-    private void init() {
-        // TODO: ask for player input for the name
-        player = new Player("PLACEHOLDER");
+    private void askForEnter() {
+        System.out.println("Press Enter to start the game!");
+        scanner.nextLine();
+    }
 
-        Room home = new Room("Home", "A cozy hut in the middle of the woods.");
-        Room woods = new Room("The Woods", "The woods outside of your home.");
-        Room deepWoods = new Room("Deep Woods", "The deepest parts of the woods.");
-        Room swamp = new Room("The Swamp", "A treacherous swamp lies before you.");
-        Room hills = new Room("The Hills", "A hilly bit of land.");
+    public void init() {
+        askForEnter();
+
+        System.out.println("What's your name?");
+        String name = scanner.nextLine();
+        this.player = new Player(name);
+        System.out.println();
+
+        Room home = new Room("Home", "A cozy hut in the middle of the woods.", this);
+        Room woods = new Room("The Woods", "The woods outside of your home.", this);
+        Room deepWoods = new Room("Deep Woods", "The deepest parts of the woods.", this);
+        Room swamp = new Room("The Swamp", "A treacherous swamp lies before you.", this);
+        Room hills = new Room("The Hills", "A hilly bit of land.", this);
 
         home.addExit("E", woods);
         woods.addExit("W", home);
@@ -37,22 +48,21 @@ public class Game {
         swamp.addExit("N", woods);
         hills.addExit("W", woods);
 
-        currentRoom = home;
-    }
+        this.currentRoom = home;
 
-    private void askForEnter() {
-        System.out.println("Press Enter to start the game!");
-        scanner.nextLine();
+        this.commandHandler = new CommandHandler(this);
+
+        run();
     }
 
     private void run() {
         System.out.println(currentRoom.getName());
         System.out.println(currentRoom.getDescription());
         System.out.println("What do you want to do?");
+        System.out.println();
         String input = scanner.nextLine();
-        // TODO: use input to check which command to run
-
-        // TODO: implement a way to quit the game
+        commandHandler.setCommand(input);
+        commandHandler.runCommand();
         run();
     }
 }
