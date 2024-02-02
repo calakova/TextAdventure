@@ -18,8 +18,9 @@ public class CommandHandler {
     public void runCommand() {
         if (commands.containsKey(command)) {
             commands.get(command).run();
-        } else {
-            System.out.println("Invalid command!");
+            return;
         }
+
+        System.out.println("Invalid command!");
     }
 }

@@ -1,6 +1,5 @@
 package at.bbrz;
 
-import java.util.Map;
 import java.util.Scanner;
 
 public class Move implements Runnable {
