@@ -3,26 +3,20 @@ package at.bbrz;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.io.PrintStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class MoveTest {
+public class GameTest {
+    Game game;
     @Mock
-    private Move move;
+    OutputHandler outputHandlerMock;
 
-    @BeforeEach
-    void setup() {
-
-    }
-
-    @Test
-    void runCallsMethods() {
-        move.run();
-
-        // TODO: Figure out how to test!
-    }
+    // TODO: Figure out how to test the Game class
 }

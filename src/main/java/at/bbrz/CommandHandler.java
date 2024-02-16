@@ -9,8 +9,11 @@ public class CommandHandler {
     @Setter
     private String command;
     private final Map<String, Runnable> commands = new HashMap<>();
+    private final OutputHandler outputHandler;
 
     public CommandHandler(Game game) {
+        this.outputHandler = game.getOutputHandler();
+
         commands.put("move", new Move(game));
         commands.put("exit", new Exit(game));
     }
@@ -21,6 +24,7 @@ public class CommandHandler {
             return;
         }
 
-        System.out.println("Invalid command!");
+        outputHandler.printLine("Invalid command!");
+        outputHandler.emptyLine();
     }
 }

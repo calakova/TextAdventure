@@ -12,9 +12,12 @@ public class Game {
     @Getter
     private Player player;
     private CommandHandler commandHandler;
+    @Getter
+    private final OutputHandler outputHandler = new OutputHandler();
+    @Getter
+    private final InputHandler inputHandler = new InputHandler();
     @Setter
     private boolean gameRunning = true;
-    private final Scanner scanner = new Scanner(System.in);
 
     public void init() {
         askForEnter();
@@ -28,26 +31,26 @@ public class Game {
 
     private void run() {
         while (this.gameRunning) {
-            System.out.println(currentRoom.getName());
-            System.out.println(currentRoom.getDescription());
-            System.out.println("What do you want to do?");
-            String input = scanner.nextLine();
-            System.out.println();
+            outputHandler.printLine(currentRoom.getName());
+            outputHandler.printLine(currentRoom.getDescription());
+            outputHandler.printLine("What do you want to do?");
+            String input = inputHandler.getNextLine();
+            outputHandler.emptyLine();
             commandHandler.setCommand(input);
             commandHandler.runCommand();
         }
     }
 
     private void askForEnter() {
-        System.out.println(OutputColors.RED.label + "Press Enter to start the game!" + OutputColors.RESET.label);
-        scanner.nextLine();
+        outputHandler.printLine(OutputColors.GREEN.label + "Press Enter to start the game!" + OutputColors.RESET.label);
+        inputHandler.getNextLine();
     }
 
     private void setupPlayer() {
-        System.out.println("What's your name?");
-        String name = scanner.nextLine();
+        outputHandler.printLine("What's your name?");
+        String name = inputHandler.getNextLine();
         this.player = new Player(name);
-        System.out.println();
+        outputHandler.emptyLine();
     }
 
     private void setupRooms() {
