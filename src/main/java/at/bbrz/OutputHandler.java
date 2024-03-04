@@ -12,10 +12,10 @@ public class OutputHandler implements Output{
         System.out.println(output);
     }
 
-    // TODO: Implement this method
     @Override
     public void printLine(String output, String color) {
-
+        OutputColors outputColor = OutputColors.findColor(color);
+        System.out.println(outputColor.getLabel() + output + OutputColors.getResetLabel());
     }
 
     @Override
