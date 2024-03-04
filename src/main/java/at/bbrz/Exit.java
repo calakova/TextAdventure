@@ -1,6 +1,6 @@
 package at.bbrz;
 
-public class Exit implements Runnable{
+public class Exit implements Command{
     private final Game game;
 
     public Exit(Game game) {
