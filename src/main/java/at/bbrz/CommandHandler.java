@@ -8,14 +8,11 @@ import java.util.Map;
 public class CommandHandler {
     @Setter
     private String command;
-    private final Map<String, Runnable> commands = new HashMap<>();
-    private final OutputHandler outputHandler;
+    private final Map<String, Command> commands = new HashMap<>();
+    private final Output outputHandler;
 
-    public CommandHandler(Game game) {
-        this.outputHandler = game.getOutputHandler();
-
-        commands.put("move", new Move(game));
-        commands.put("exit", new Exit(game));
+    public CommandHandler(Output outputHandler) {
+        this.outputHandler = outputHandler;
     }
 
     public void runCommand() {
@@ -24,7 +21,11 @@ public class CommandHandler {
             return;
         }
 
-        outputHandler.printLine("Invalid command!");
+        outputHandler.printLine("Invalid command!", "red");
         outputHandler.emptyLine();
+    }
+
+    public void addCommand(String commandName, Command command) {
+        commands.put(commandName, command);
     }
 }
