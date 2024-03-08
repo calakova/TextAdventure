@@ -1,5 +1,7 @@
 package at.bbrz;
 
+import at.bbrz.commands.Exit;
+import at.bbrz.commands.Move;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,9 +33,7 @@ public class CommandHandlerTest {
 
     @Test
     public void runCommandInvalidInput() {
-        commandHandler.setCommand("test");
-
-        commandHandler.runCommand();
+        commandHandler.runCommand("test");
         verify(outputMock).printLine(stringArgumentCaptor.capture(), stringArgumentCaptor.capture());
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
@@ -44,9 +44,7 @@ public class CommandHandlerTest {
 
     @Test
     public void runCommandEmptyStringInput() {
-        commandHandler.setCommand("");
-
-        commandHandler.runCommand();
+        commandHandler.runCommand("");
         verify(outputMock).printLine(stringArgumentCaptor.capture(), stringArgumentCaptor.capture());
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
@@ -57,9 +55,7 @@ public class CommandHandlerTest {
 
     @Test
     public void runCommandNullInput() {
-        commandHandler.setCommand(null);
-
-        commandHandler.runCommand();
+        commandHandler.runCommand(null);
         verify(outputMock).printLine(stringArgumentCaptor.capture(), stringArgumentCaptor.capture());
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
@@ -70,11 +66,9 @@ public class CommandHandlerTest {
 
     @Test
     public void runCommandLongStringInput() {
-        commandHandler.setCommand("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-        commandHandler.runCommand();
+        commandHandler.runCommand("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         verify(outputMock).printLine(stringArgumentCaptor.capture(), stringArgumentCaptor.capture());
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
@@ -85,9 +79,7 @@ public class CommandHandlerTest {
 
     @Test
     public void runCommandSpecialCharactersInput() {
-        commandHandler.setCommand("!\"§²³@€$%&/()=?{[]}ß\\üäö<>|`´#'+*~,;.:-_^°");
-
-        commandHandler.runCommand();
+        commandHandler.runCommand("!\"§²³@€$%&/()=?{[]}ß\\üäö<>|`´#'+*~,;.:-_^°");
         verify(outputMock).printLine(stringArgumentCaptor.capture(), stringArgumentCaptor.capture());
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
@@ -99,16 +91,14 @@ public class CommandHandlerTest {
     @Test
     void runCommandValidInputMove() {
         commandHandler.addCommand("move", moveMock);
-        commandHandler.setCommand("move");
-        commandHandler.runCommand();
+        commandHandler.runCommand("move");
         verify(moveMock).run();
     }
 
     @Test
     void runCommandValidInputExit() {
         commandHandler.addCommand("exit", exitMock);
-        commandHandler.setCommand("exit");
-        commandHandler.runCommand();
+        commandHandler.runCommand("exit");
         verify(exitMock).run();
     }
 }

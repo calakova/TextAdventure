@@ -2,23 +2,25 @@ package at.bbrz;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 public class Room {
     private final Game game;
+    @Getter
     private final String name;
+    @Getter
     private final String description;
-    private final Map<String, Room> exits;
-    private List<Item> items;
+    private final Map<String, Room> exits = new HashMap<>();
+    @Getter
+    private final List<Item> items = new ArrayList<>();
 
     public Room(String name, String description, Game game) {
         this.game = game;
         this.name = name;
         this.description = description;
-        this.exits = new HashMap<>();
     }
 
     public void addExit(String name, Room exit) {
@@ -29,13 +31,15 @@ public class Room {
         items.add(item);
     }
 
+    public void removeItem(Item item) {
+
+    }
+
     public String getExitDirections() {
-        StringBuilder directions = new StringBuilder();
-        for (Map.Entry<String, Room> pair : game.getCurrentRoom().getExits().entrySet()) {
-            directions.append(pair.getKey())
-                    .append(", ");
-        }
-        directions.setLength(directions.length() - 2);
-        return directions.toString();
+        return String.join(", ", game.getCurrentRoom().exits.keySet());
+    }
+
+    public Room getExitFor(String direction) {
+        return exits.get(direction);
     }
 }

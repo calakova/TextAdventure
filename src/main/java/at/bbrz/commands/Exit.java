@@ -1,4 +1,6 @@
-package at.bbrz;
+package at.bbrz.commands;
+
+import at.bbrz.Game;
 
 public class Exit implements Command{
     private final Game game;

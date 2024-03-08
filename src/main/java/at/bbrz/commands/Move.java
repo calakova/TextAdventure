@@ -1,14 +1,21 @@
-package at.bbrz;
+package at.bbrz.commands;
 
+import at.bbrz.Game;
+import at.bbrz.Input;
+import at.bbrz.Output;
+import at.bbrz.Room;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Move implements Command {
     private final Game game;
     private Room currentRoom;
-    private final OutputHandler outputHandler;
-    private final InputHandler inputHandler;
+    private final Output outputHandler;
+    private final Input inputHandler;
 
-    public Move(Game game, Room currentRoom, OutputHandler outputHandler, InputHandler inputHandler) {
+    public Move(Game game, Room currentRoom, Output outputHandler, Input inputHandler) {
         this.game = game;
         this.currentRoom = currentRoom;
         this.outputHandler = outputHandler;

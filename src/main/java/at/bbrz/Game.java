@@ -1,9 +1,12 @@
 package at.bbrz;
 
+import at.bbrz.armor.*;
+import at.bbrz.commands.Exit;
+import at.bbrz.commands.Move;
+import at.bbrz.commands.Stats;
+import at.bbrz.commands.Suicide;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Scanner;
 
 public class Game {
     @Getter
@@ -13,19 +16,23 @@ public class Game {
     private Player player;
     private CommandHandler commandHandler;
     @Getter
-    private final OutputHandler outputHandler = new OutputHandler();
+    private final Output outputHandler;
     @Getter
-    private final InputHandler inputHandler = new InputHandler();
+    private final Input inputHandler;
     @Setter
     private boolean gameRunning = true;
+
+    public Game(Output outputHandler, Input inputHandler, CommandHandler commandHandler) {
+        this.outputHandler = outputHandler;
+        this.inputHandler = inputHandler;
+        this.commandHandler = commandHandler;
+    }
 
     public void init() {
         askForEnter();
         setupPlayer();
         setupRooms();
-
-        this.commandHandler = new CommandHandler(this);
-
+        setupCommands();
         run();
     }
 
@@ -33,23 +40,32 @@ public class Game {
         while (this.gameRunning) {
             outputHandler.printLine(currentRoom.getName());
             outputHandler.printLine(currentRoom.getDescription());
-            outputHandler.printLine("What do you want to do?");
+            outputHandler.printLine("What do you want to do?", "yellow");
             String input = inputHandler.getNextLine();
             outputHandler.emptyLine();
-            commandHandler.setCommand(input);
-            commandHandler.runCommand();
+            commandHandler.runCommand(input);
         }
     }
 
     private void askForEnter() {
-        outputHandler.printLine(OutputColors.GREEN.label + "Press Enter to start the game!" + OutputColors.RESET.label);
+        outputHandler.printLine("Press Enter to start the game!", "green");
         inputHandler.getNextLine();
     }
 
     private void setupPlayer() {
-        outputHandler.printLine("What's your name?");
+        outputHandler.printLine("What's your name?", "yellow");
         String name = inputHandler.getNextLine();
-        this.player = new Player(name);
+        ArmorSet armorSet = new ArmorSet(
+                new HeadArmor("Hat", 1),
+                new TorsoArmor("Jacket", 2),
+                new LegArmor("Linen Pants", 1),
+                new FootArmor("Leather Shoes", 1));
+        this.player = new Player(
+                name,
+                armorSet,
+                new Weapon("Shortsword", 3),
+                this.outputHandler,
+                this);
         outputHandler.emptyLine();
     }
 
@@ -70,5 +86,15 @@ public class Game {
         hills.addExit("W", woods);
 
         this.currentRoom = home;
+    }
+
+    private void setupCommands() {
+        this.commandHandler = new CommandHandler(outputHandler);
+        commandHandler.addCommand("move",
+                new Move(this, currentRoom, outputHandler, inputHandler));
+        commandHandler.addCommand("exit", new Exit(this));
+        commandHandler.addCommand("stats",
+                new Stats(player, player.getArmorSet(), player.getWeapon(), outputHandler));
+        commandHandler.addCommand("suicide", new Suicide(player));
     }
 }

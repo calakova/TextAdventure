@@ -1,5 +1,10 @@
-package at.bbrz;
+package at.bbrz.commands;
 
+import at.bbrz.Game;
+import at.bbrz.Input;
+import at.bbrz.Output;
+import at.bbrz.Room;
+import at.bbrz.commands.Move;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +28,9 @@ public class MoveTest {
     @Mock
     Room nextRoomMock;
     @Mock
-    OutputHandler outputHandlerMock;
+    Output outputMock;
     @Mock
-    InputHandler inputHandlerMock;
+    Input inputMock;
     @Captor
     ArgumentCaptor<String> stringArgumentCaptor;
 
@@ -33,13 +38,13 @@ public class MoveTest {
 
     @BeforeEach
     void setup() {
-        move = new Move(gameMock, roomMock, outputHandlerMock, inputHandlerMock);
+        move = new Move(gameMock, roomMock, outputMock, inputMock);
         when(roomMock.getExitDirections()).thenReturn("E");
     }
 
     @Test
     void runWithValidInput() {
-        when(inputHandlerMock.getNextLine()).thenReturn("E");
+        when(inputMock.getNextLine()).thenReturn("E");
         when(roomMock.getExitFor("E")).thenReturn(nextRoomMock);
         move.run();
         verify(gameMock).setCurrentRoom(nextRoomMock);
@@ -47,7 +52,7 @@ public class MoveTest {
 
     @Test
     void runWithInvalidInput() {
-        when(inputHandlerMock.getNextLine()).thenReturn("N");
+        when(inputMock.getNextLine()).thenReturn("N");
         move.run();
 
         inOrderVerifyOutputHandlerMock();
@@ -59,7 +64,7 @@ public class MoveTest {
 
     @Test
     void runWithEmptyStringInput() {
-        when(inputHandlerMock.getNextLine()).thenReturn("");
+        when(inputMock.getNextLine()).thenReturn("");
         move.run();
 
         inOrderVerifyOutputHandlerMock();
@@ -71,7 +76,7 @@ public class MoveTest {
 
     @Test
     void runWithNullInput() {
-        when(inputHandlerMock.getNextLine()).thenReturn(null);
+        when(inputMock.getNextLine()).thenReturn(null);
         move.run();
 
         inOrderVerifyOutputHandlerMock();
@@ -83,7 +88,7 @@ public class MoveTest {
 
     @Test
     void runWithLongStringInput() {
-        when(inputHandlerMock.getNextLine()).thenReturn("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+        when(inputMock.getNextLine()).thenReturn("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
@@ -99,7 +104,7 @@ public class MoveTest {
 
     @Test
     void runWithSpecialCharactersInput() {
-        when(inputHandlerMock.getNextLine()).thenReturn("!\"§²³@€$%&/()=?{[]}ß\\üäö<>|`´#'+*~,;.:-_^°");
+        when(inputMock.getNextLine()).thenReturn("!\"§²³@€$%&/()=?{[]}ß\\üäö<>|`´#'+*~,;.:-_^°");
         move.run();
 
         inOrderVerifyOutputHandlerMock();
@@ -110,15 +115,15 @@ public class MoveTest {
     }
 
     void inOrderVerifyOutputHandlerMock() {
-        InOrder inOrder = inOrder(outputHandlerMock);
-        inOrder.verify(outputHandlerMock, times(2))
+        InOrder inOrder = inOrder(outputMock);
+        inOrder.verify(outputMock, times(2))
                 .printLine(stringArgumentCaptor.capture(),
                         stringArgumentCaptor.capture());
-        inOrder.verify(outputHandlerMock).emptyLine();
-        inOrder.verify(outputHandlerMock)
+        inOrder.verify(outputMock).emptyLine();
+        inOrder.verify(outputMock)
                 .printLine(stringArgumentCaptor.capture(),
                         stringArgumentCaptor.capture());
-        inOrder.verify(outputHandlerMock).emptyLine();
+        inOrder.verify(outputMock).emptyLine();
     }
 
     void assertStringListValuesAreExpected(List<String> stringList) {

@@ -1,13 +1,13 @@
 package at.bbrz;
 
+import at.bbrz.commands.Command;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHandler {
-    @Setter
-    private String command;
     private final Map<String, Command> commands = new HashMap<>();
     private final Output outputHandler;
 
@@ -15,9 +15,9 @@ public class CommandHandler {
         this.outputHandler = outputHandler;
     }
 
-    public void runCommand() {
-        if (commands.containsKey(command)) {
-            commands.get(command).run();
+    public void runCommand(String input) {
+        if (commands.containsKey(input)) {
+            commands.get(input).run();
             return;
         }
 
