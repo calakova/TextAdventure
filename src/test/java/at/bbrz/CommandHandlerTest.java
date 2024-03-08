@@ -101,4 +101,6 @@ public class CommandHandlerTest {
         commandHandler.runCommand("exit");
         verify(exitMock).run();
     }
+
+    // TODO: Write more tests as more commands are made
 }

@@ -14,7 +14,6 @@ public class Room {
     @Getter
     private final String description;
     private final Map<String, Room> exits = new HashMap<>();
-    @Getter
     private final List<Item> items = new ArrayList<>();
 
     public Room(String name, String description, Game game) {
@@ -23,16 +22,24 @@ public class Room {
         this.description = description;
     }
 
-    public void addExit(String name, Room exit) {
-        exits.put(name, exit);
-    }
-
     public void addItem(Item item) {
         items.add(item);
     }
 
     public void removeItem(Item item) {
+        items.remove(item);
+    }
 
+    public ArrayList<String> getListOfItems() {
+        ArrayList<String> itemNames = new ArrayList<>();
+        for (Item item : items) {
+            itemNames.add(item.getName());
+        }
+        return itemNames;
+    }
+
+    public void addExit(String name, Room exit) {
+        exits.put(name, exit);
     }
 
     public String getExitDirections() {

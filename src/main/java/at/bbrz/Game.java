@@ -1,12 +1,11 @@
 package at.bbrz;
 
 import at.bbrz.armor.*;
-import at.bbrz.commands.Exit;
-import at.bbrz.commands.Move;
-import at.bbrz.commands.Stats;
-import at.bbrz.commands.Suicide;
+import at.bbrz.commands.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 public class Game {
     @Getter
@@ -88,6 +87,26 @@ public class Game {
         Room swamp = new Room("The Swamp", "A treacherous swamp lies before you.", this);
         Room hills = new Room("The Hills", "A hilly bit of land.", this);
 
+        Room[] rooms = {home, woods, deepWoods, swamp, hills};
+        addExitsToRooms(rooms);
+
+        home.addItem(new Item("Torch",
+                "An unlit torch. \n" +
+                "Use your Ignite spell to light it!"));
+        home.addItem(new Item("Health Potion",
+                "A blood red potion. \n" +
+                        "Use it to restore 50 HP"));
+
+        this.currentRoom = home;
+    }
+
+    private void addExitsToRooms(Room[] rooms) {
+        Room home = rooms[0];
+        Room woods = rooms[1];
+        Room deepWoods = rooms[2];
+        Room swamp = rooms[3];
+        Room hills = rooms[4];
+
         home.addExit("E", woods);
         woods.addExit("W", home);
         woods.addExit("N", deepWoods);
@@ -96,8 +115,6 @@ public class Game {
         deepWoods.addExit("S", woods);
         swamp.addExit("N", woods);
         hills.addExit("W", woods);
-
-        this.currentRoom = home;
     }
 
     private void setupCommands() {
@@ -108,5 +125,6 @@ public class Game {
         commandHandler.addCommand("stats",
                 new Stats(player, player.getArmorSet(), player.getWeapon(), outputHandler));
         commandHandler.addCommand("suicide", new Suicide(player));
+        commandHandler.addCommand("look", new Look(currentRoom, outputHandler));
     }
 }

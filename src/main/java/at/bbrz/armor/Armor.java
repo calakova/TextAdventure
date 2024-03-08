@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class Armor extends Item {
-    protected int defence;
+    protected final int defence;
 
     protected Armor(String name, String description, int defence) {
         super(name, description);
