@@ -1,14 +1,14 @@
 package at.bbrz.armor;
 
+import at.bbrz.Item;
 import lombok.Getter;
 
 @Getter
-public class Armor {
-    protected String name;
+public class Armor extends Item {
     protected int defence;
 
-    protected Armor(String name, int defence) {
-        this.name = name;
+    protected Armor(String name, String description, int defence) {
+        super(name, description);
         this.defence = defence;
     }
 }

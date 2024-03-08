@@ -1,11 +1,13 @@
 package at.bbrz;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
-public class Weapon {
-    private String name;
+public class Weapon extends Item {
     @Getter
-    private int attack;
+    private final int attack;
+
+    public Weapon(String name, String description, int attack) {
+        super(name, description);
+        this.attack = attack;
+    }
 }

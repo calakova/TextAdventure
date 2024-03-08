@@ -1,7 +1,7 @@
 package at.bbrz.armor;
 
 public class TorsoArmor extends Armor {
-    public TorsoArmor(String name, int defence) {
-        super(name, defence);
+    public TorsoArmor(String name, String description, int defence) {
+        super(name, description, defence);
     }
 }

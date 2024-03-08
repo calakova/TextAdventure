@@ -56,15 +56,27 @@ public class Game {
         outputHandler.printLine("What's your name?", "yellow");
         String name = inputHandler.getNextLine();
         ArmorSet armorSet = new ArmorSet(
-                new HeadArmor("Hat", 1),
-                new TorsoArmor("Jacket", 2),
-                new LegArmor("Linen Pants", 1),
-                new FootArmor("Leather Shoes", 1));
+                new HeadArmor("Hat",
+                        "A hat that has withstood the test of time. \n" +
+                                "Offers little to no defensive value",
+                        1),
+                new TorsoArmor("Jacket",
+                        "A somewhat new wool jacket",
+                        2),
+                new LegArmor("Linen Pants",
+                        "A nice pair of linen pants.",
+                        1),
+                new FootArmor("Leather Shoes",
+                        "A worn pair of leather shoes",
+                        1));
         this.player = new Player(
                 name,
                 armorSet,
-                new Weapon("Shortsword", 3),
-                this.outputHandler,
+                new Weapon("Shortsword",
+                        "A shortwsword. \n" +
+                                "Rather weak, but better than nothing",
+                        3),
+                outputHandler,
                 this);
         outputHandler.emptyLine();
     }

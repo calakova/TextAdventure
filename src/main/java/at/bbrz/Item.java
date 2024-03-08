@@ -1,8 +1,11 @@
 package at.bbrz;
 
 public class Item {
-    private String name;
-    private String description;
-    private boolean takeable;
-    private boolean useable;
+    protected String name;
+    protected String description;
+
+    public Item(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
