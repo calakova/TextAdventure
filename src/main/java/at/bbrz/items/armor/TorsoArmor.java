@@ -1,4 +1,4 @@
-package at.bbrz.armor;
+package at.bbrz.items.armor;
 
 public class TorsoArmor extends Armor {
     public TorsoArmor(String name, String description, int defence) {

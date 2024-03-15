@@ -1,9 +1,9 @@
 package at.bbrz.commands;
 
-import at.bbrz.armor.ArmorSet;
+import at.bbrz.items.armor.ArmorSet;
 import at.bbrz.Output;
 import at.bbrz.Player;
-import at.bbrz.Weapon;
+import at.bbrz.items.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

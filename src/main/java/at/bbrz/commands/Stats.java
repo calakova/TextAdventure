@@ -1,11 +1,9 @@
 package at.bbrz.commands;
 
-import at.bbrz.armor.ArmorSet;
+import at.bbrz.items.armor.ArmorSet;
 import at.bbrz.Output;
 import at.bbrz.Player;
-import at.bbrz.Weapon;
-
-import java.util.List;
+import at.bbrz.items.Weapon;
 
 public class Stats implements Command {
     private final Player player;

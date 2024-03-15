@@ -1,4 +1,4 @@
-package at.bbrz;
+package at.bbrz.items;
 
 import lombok.Getter;
 

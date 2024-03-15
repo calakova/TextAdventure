@@ -1,5 +1,6 @@
 package at.bbrz;
 
+import at.bbrz.items.Item;
 import lombok.Getter;
 
 import java.util.ArrayList;

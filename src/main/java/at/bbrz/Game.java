@@ -1,11 +1,10 @@
 package at.bbrz;
 
-import at.bbrz.armor.*;
+import at.bbrz.items.*;
 import at.bbrz.commands.*;
+import at.bbrz.items.armor.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 public class Game {
     @Getter

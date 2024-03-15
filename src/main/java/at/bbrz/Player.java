@@ -1,6 +1,8 @@
 package at.bbrz;
 
-import at.bbrz.armor.ArmorSet;
+import at.bbrz.items.armor.ArmorSet;
+import at.bbrz.items.Item;
+import at.bbrz.items.Weapon;
 import lombok.Getter;
 import lombok.Setter;
 

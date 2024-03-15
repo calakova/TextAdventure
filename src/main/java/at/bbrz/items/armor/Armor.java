@@ -1,6 +1,6 @@
-package at.bbrz.armor;
+package at.bbrz.items.armor;
 
-import at.bbrz.Item;
+import at.bbrz.items.Item;
 import lombok.Getter;
 
 @Getter

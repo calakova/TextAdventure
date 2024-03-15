@@ -1,10 +1,13 @@
 package at.bbrz;
 
-import at.bbrz.armor.ArmorSet;
+import at.bbrz.items.armor.ArmorSet;
+import at.bbrz.items.Weapon;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,11 +38,22 @@ public class PlayerTest {
         player = new Player("Test", armorSetMock, weaponMock, outputMock, gameMock);
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {1, 10, 99})
-    void takeDamageNoDefence(int rawDamage) {
-        when(armorSetMock.getDefence()).thenReturn(0);
 
+    @DisplayName("Player takes damage")
+    @ParameterizedTest(name = "rawDam: {0}, def: {1}, originalHP: {2}, expectedDam: {3}, expectedHP: {4}")
+    @CsvSource(delimiter = '|', textBlock = """
+        1    | 0   | 100 | 1  | 99
+        100  | 1   | 100 | 99 | 1
+        1000 | 999 | 2   | 1  | 1
+    """)
+    void takeDamageWhenDamageHigherThanDefence(int rawDamage,
+                                               int defence,
+                                               int originalHP,
+                                               int expectedDamage,
+                                               int expectedHP) {
+        when(armorSetMock.getDefence()).thenReturn(defence);
+
+        player.setCurrentHP(originalHP);
         player.takeDamage(rawDamage);
 
         InOrder inOrder = inOrder(outputMock);
@@ -50,40 +64,24 @@ public class PlayerTest {
 
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
-        assertEquals("Test took " + rawDamage + " damage!", capturedStrings.get(0));
+        assertEquals("Test took " + expectedDamage + " damage!", capturedStrings.get(0));
         assertEquals("purple", capturedStrings.get(1));
-        assertEquals(100 - rawDamage + "/100 HP", capturedStrings.get(2));
+        assertEquals(expectedHP + "/100 HP", capturedStrings.get(2));
         assertEquals("purple", capturedStrings.get(3));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {11, 20, 109})
-    void takeDamage10Defence(int rawDamage) {
-        when(armorSetMock.getDefence()).thenReturn(10);
+    @DisplayName("Player takes no damage")
+    @ParameterizedTest(name = "rawDam: {0}, def: {1}, originalHP: {2}")
+    @CsvSource(delimiter = '|', textBlock = """
+        1       | 1         | 100
+        0       | 0         | 100
+        1000    | 1000      | 2
+        1000000 | 100000000 | 100
+    """)
+    void takeNoDamageWhenDamageLowerThanOrEqualToDefence(int rawDamage, int defence, int originalHP) {
+        when(armorSetMock.getDefence()).thenReturn(defence);
 
-        player.takeDamage(rawDamage);
-
-        InOrder inOrder = inOrder(outputMock);
-        inOrder.verify(outputMock, times(2))
-                .printLine(stringArgumentCaptor.capture(),
-                        stringArgumentCaptor.capture());
-        inOrder.verify(outputMock).emptyLine();
-
-        List<String> capturedStrings = stringArgumentCaptor.getAllValues();
-
-        assertEquals("Test took " + (rawDamage - armorSetMock.getDefence())
-                + " damage!", capturedStrings.get(0));
-        assertEquals("purple", capturedStrings.get(1));
-        assertEquals((100 - (rawDamage - armorSetMock.getDefence()))
-                + "/100 HP", capturedStrings.get(2));
-        assertEquals("purple", capturedStrings.get(3));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {0, 20, 100})
-    void takeNoDamage100Defence(int rawDamage) {
-        when(armorSetMock.getDefence()).thenReturn(100);
-
+        player.setCurrentHP(originalHP);
         player.takeDamage(rawDamage);
 
         InOrder inOrder = inOrder(outputMock);
@@ -96,7 +94,7 @@ public class PlayerTest {
 
         assertEquals("Test took 0 damage!", capturedStrings.get(0));
         assertEquals("purple", capturedStrings.get(1));
-        assertEquals("100/100 HP", capturedStrings.get(2));
+        assertEquals(originalHP + "/100 HP", capturedStrings.get(2));
         assertEquals("purple", capturedStrings.get(3));
     }
 
@@ -121,11 +119,18 @@ public class PlayerTest {
         assertEquals("purple", capturedStrings.get(3));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {101, 1000, Integer.MAX_VALUE})
-    void dieFromDamageNoDefence(int rawDamage) {
-        when(armorSetMock.getDefence()).thenReturn(0);
+    @DisplayName("Player dies from damage")
+    @ParameterizedTest(name = "rawDam: {0}, def: {1}, originalHP: {2}, expectedDam: {3}")
+    @CsvSource(delimiter = '|', textBlock = """
+        101       | 1      | 100 | 100
+        1         | 0      | 1   | 1
+        1000      | 10     | 20  | 990
+        1_000_000 | 10_000 | 100 | 990_000
+    """)
+    void dieFromDamage(int rawDamage, int defence, int originalHP, int expectedDamage) {
+        when(armorSetMock.getDefence()).thenReturn(defence);
 
+        player.setCurrentHP(originalHP);
         player.takeDamage(rawDamage);
 
         InOrder inOrder = inOrder(outputMock, gameMock);
@@ -136,7 +141,7 @@ public class PlayerTest {
 
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
-        assertEquals("Test took " + rawDamage + " damage!", capturedStrings.get(0));
+        assertEquals("Test took " + expectedDamage + " damage!", capturedStrings.get(0));
         assertEquals("purple", capturedStrings.get(1));
         assertEquals("You died!", capturedStrings.get(2));
         assertEquals("red", capturedStrings.get(3));
@@ -144,12 +149,11 @@ public class PlayerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {181, 1000, Integer.MAX_VALUE})
-    void dieFromDamage100Defence80HP(int rawDamage) {
-        when(armorSetMock.getDefence()).thenReturn(0);
+    @ValueSource(ints = {0, 100, 100_000})
+    void dieFromMaxDamage(int defence) {
+        when(armorSetMock.getDefence()).thenReturn(defence);
 
-        player.setCurrentHP(80);
-        player.takeDamage(rawDamage);
+        player.takeDamage(Integer.MAX_VALUE);
 
         InOrder inOrder = inOrder(outputMock, gameMock);
         inOrder.verify(outputMock, times(2))
@@ -159,8 +163,7 @@ public class PlayerTest {
 
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
-        assertEquals("Test took " + (rawDamage - armorSetMock.getDefence())
-                + " damage!", capturedStrings.get(0));
+        assertEquals("Test took " + (Integer.MAX_VALUE - defence) + " damage!", capturedStrings.get(0));
         assertEquals("purple", capturedStrings.get(1));
         assertEquals("You died!", capturedStrings.get(2));
         assertEquals("red", capturedStrings.get(3));

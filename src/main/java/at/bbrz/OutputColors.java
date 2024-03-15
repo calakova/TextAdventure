@@ -25,7 +25,7 @@ public enum OutputColors {
         String colorUpperCase = color.toUpperCase();
         OutputColors result = null;
         for (OutputColors outputColor : values()) {
-            if (outputColor.name().equals(colorUpperCase)) {
+            if (outputColor.name().equalsIgnoreCase(colorUpperCase)) {
                 result = outputColor;
                 break;
             }

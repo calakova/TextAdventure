@@ -1,4 +1,4 @@
-package at.bbrz.armor;
+package at.bbrz.items.armor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

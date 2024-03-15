@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Look implements Command {
     private Room room;
-    private Output outputHandler;
+    private final Output outputHandler;
 
     public Look(Room room, Output outputHandler) {
         this.room = room;

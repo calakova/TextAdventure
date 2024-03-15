@@ -1,7 +1,6 @@
 package at.bbrz;
 
-import at.bbrz.commands.Exit;
-import at.bbrz.commands.Move;
+import at.bbrz.commands.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +23,12 @@ public class CommandHandlerTest {
     Move moveMock;
     @Mock
     Exit exitMock;
+    @Mock
+    Suicide suicideMock;
+    @Mock
+    Stats statsMock;
+    @Mock
+    Look lookMock;
 
 
     @BeforeEach
@@ -100,6 +105,27 @@ public class CommandHandlerTest {
         commandHandler.addCommand("exit", exitMock);
         commandHandler.runCommand("exit");
         verify(exitMock).run();
+    }
+
+    @Test
+    void runCommandValidInputSuicide() {
+        commandHandler.addCommand("suicide", suicideMock);
+        commandHandler.runCommand("suicide");
+        verify(suicideMock).run();
+    }
+
+    @Test
+    void runCommandValidInputStats() {
+        commandHandler.addCommand("stats", statsMock);
+        commandHandler.runCommand("stats");
+        verify(statsMock).run();
+    }
+
+    @Test
+    void runCommandValidInputLook() {
+        commandHandler.addCommand("look", lookMock);
+        commandHandler.runCommand("look");
+        verify(lookMock).run();
     }
 
     // TODO: Write more tests as more commands are made
