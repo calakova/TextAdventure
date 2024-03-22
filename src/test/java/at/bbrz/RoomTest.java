@@ -22,31 +22,25 @@ public class RoomTest {
 
     @BeforeEach
     void setup() {
-        room = new Room("Example", "Example", gameMock);
+        room = new Room(0, "Example", "Example", gameMock);
     }
 
     @Test
     void getExitDirectionsOneExit() {
         when(gameMock.getCurrentRoom()).thenReturn(room);
-        room.addExit("E", roomMock);
-        String result = room.getExitDirections();
+        String result = room.getExitDirectionsString();
         assertEquals("E", result);
     }
 
     @Test
     void getExitDirectionsFourExits() {
         when(gameMock.getCurrentRoom()).thenReturn(room);
-        room.addExit("S", roomMock);
-        room.addExit("E", roomMock);
-        room.addExit("W", roomMock);
-        room.addExit("N", roomMock);
-        String result = room.getExitDirections();
+        String result = room.getExitDirectionsString();
         assertEquals("S, E, W, N", result);
     }
 
     @Test
     void getExitFor() {
-        room.addExit("E", roomMock);
         Room exit = room.getExitFor("E");
         assertEquals(exit, roomMock);
     }

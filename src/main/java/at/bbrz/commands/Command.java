@@ -1,5 +1,5 @@
 package at.bbrz.commands;
 
 public interface Command {
-    void run();
+    void run(String parameter);
 }

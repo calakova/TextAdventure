@@ -20,13 +20,15 @@ public class GameTest {
     Output outputMock;
     @Mock
     Input inputMock;
+    @Mock
+    JSONLoader JSONLoaderMock;
     @Captor
     ArgumentCaptor<String> stringArgumentCaptor;
 
 
     @BeforeEach
     void setup() {
-        game = new Game(outputMock, inputMock, commandHandlerMock);
+        game = new Game(outputMock, inputMock, commandHandlerMock, JSONLoaderMock);
     }
 
     @Test
@@ -35,7 +37,12 @@ public class GameTest {
 
         game.init();
 
-        InOrder inOrder = inOrder(outputMock, inputMock, commandHandlerMock);
+        InOrder inOrder = inOrder(outputMock, inputMock, commandHandlerMock, JSONLoaderMock);
+        inOrder.verify(JSONLoaderMock).loadItems(stringArgumentCaptor.capture());
+        inOrder.verify(JSONLoaderMock).loadArmor(stringArgumentCaptor.capture());
+        inOrder.verify(JSONLoaderMock).loadWeapons(stringArgumentCaptor.capture());
+        inOrder.verify(JSONLoaderMock).loadRooms(stringArgumentCaptor.capture());
+
         inOrder.verify(outputMock)
                 .printLine(stringArgumentCaptor.capture(),
                         stringArgumentCaptor.capture());
@@ -57,13 +64,21 @@ public class GameTest {
 
         List<String> capturedStrings = stringArgumentCaptor.getAllValues();
 
-        assertEquals("Press Enter to start the game!", capturedStrings.get(0));
-        assertEquals("green", capturedStrings.get(1));
-        assertEquals("What's your name?", capturedStrings.get(2));
-        assertEquals("yellow", capturedStrings.get(3));
-        assertEquals("Home", capturedStrings.get(4));
-        assertEquals("A cozy hut in the middle of the woods.", capturedStrings.get(5));
-        assertEquals("What do you want to do?", capturedStrings.get(6));
+        assertEquals("C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                "\\src\\main\\resources\\json\\items.json", capturedStrings.get(0));
+        assertEquals("C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                "\\src\\main\\resources\\json\\armor.json", capturedStrings.get(1));
+        assertEquals("C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                "\\src\\main\\resources\\json\\weapons.json", capturedStrings.get(2));
+        assertEquals("C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                "\\src\\main\\resources\\json\\rooms.json", capturedStrings.get(3));
+        assertEquals("Press Enter to start the game!", capturedStrings.get(4));
+        assertEquals("green", capturedStrings.get(5));
+        assertEquals("What's your name?", capturedStrings.get(6));
         assertEquals("yellow", capturedStrings.get(7));
+        assertEquals("Home", capturedStrings.get(8));
+        assertEquals("A cozy hut in the middle of the woods.", capturedStrings.get(9));
+        assertEquals("What do you want to do?", capturedStrings.get(10));
+        assertEquals("yellow", capturedStrings.get(11));
     }
 }

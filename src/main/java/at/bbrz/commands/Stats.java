@@ -19,7 +19,7 @@ public class Stats implements Command {
     }
 
     @Override
-    public void run() {
+    public void run(String parameter) {
         outputHandler.printLine("Name: " + player.getName(), "green");
         outputHandler.printLine("HP: " + player.getCurrentHP()
                 + "/" + player.getMaxHP(), "green");

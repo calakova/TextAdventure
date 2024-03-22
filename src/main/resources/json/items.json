@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Torch",
+    "description": "An unlit torch. \nUse your Ignite spell to light it!"
+  },
+
+  {
+    "name": "Health Potion",
+    "description": "A blood red potion. \nUse it to restore 50 HP"
+  }
+]

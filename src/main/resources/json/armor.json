@@ -1,0 +1,25 @@
+[
+  {
+    "name": "Hat",
+    "description": "A hat that has withstood the test of time. \nOffers little to no defensive value.",
+    "defence": 1
+  },
+
+  {
+    "name": "Jacket",
+    "description": "A somewhat new wool jacket.",
+    "defence": 2
+  },
+
+  {
+    "name": "Linen Pants",
+    "description": "A nice pair of linen pants.",
+    "defence": 1
+  },
+
+  {
+    "name": "Leather Shoes",
+    "description": "A worn pair of leather shoes.",
+    "defence": 1
+  }
+]

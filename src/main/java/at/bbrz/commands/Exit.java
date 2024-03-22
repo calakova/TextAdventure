@@ -10,7 +10,7 @@ public class Exit implements Command{
     }
 
     @Override
-    public void run() {
+    public void run(String parameter) {
         game.setGameRunning(false);
     }
 }

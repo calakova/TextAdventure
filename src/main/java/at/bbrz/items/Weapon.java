@@ -2,8 +2,8 @@ package at.bbrz.items;
 
 import lombok.Getter;
 
+@Getter
 public class Weapon extends Item {
-    @Getter
     private final int attack;
 
     public Weapon(String name, String description, int attack) {

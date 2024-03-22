@@ -1,0 +1,55 @@
+[
+  {
+    "id": 0,
+    "game": {},
+    "name": "Home",
+    "description": "A cozy hut in the middle of the woods.",
+    "exits": {
+      "E": 1
+    },
+    "items": []
+  },
+  {
+    "id": 1,
+    "game": {},
+    "name": "The Woods",
+    "description": "The woods outside of your home.",
+    "exits": {
+      "N": 2,
+      "E": 4,
+      "S": 3,
+      "W": 0
+    },
+    "items": []
+  },
+  {
+    "id": 2,
+    "game": {},
+    "name": "Deep Woods",
+    "description": "The deepest parts of the woods.",
+    "exits": {
+      "S": 1
+    },
+    "items": []
+  },
+  {
+    "id": 3,
+    "game": {},
+    "name": "The Swamp",
+    "description": "A treacherous swamp lies before you.",
+    "exits": {
+      "N": 1
+    },
+    "items": []
+  },
+  {
+    "id": 4,
+    "game": {},
+    "name": "The Hills",
+    "description": "A hilly bit of land.",
+    "exits": {
+      "W": 1
+    },
+    "items": []
+  }
+]

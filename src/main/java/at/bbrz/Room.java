@@ -2,22 +2,26 @@ package at.bbrz;
 
 import at.bbrz.items.Item;
 import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Room {
-    private final Game game;
+    private final int id;
+    @Setter
+    private Game game;
     @Getter
     private final String name;
     @Getter
     private final String description;
-    private final Map<String, Room> exits = new HashMap<>();
+    private final Map<String, Integer> exits = new CaseInsensitiveMap<>();
     private final List<Item> items = new ArrayList<>();
 
-    public Room(String name, String description, Game game) {
+    public Room(int id, String name, String description, Game game) {
+        this.id = id;
         this.game = game;
         this.name = name;
         this.description = description;
@@ -39,15 +43,16 @@ public class Room {
         return itemNames;
     }
 
-    public void addExit(String name, Room exit) {
-        exits.put(name, exit);
-    }
-
-    public String getExitDirections() {
+    public String getExitDirectionsString() {
         return String.join(", ", game.getCurrentRoom().exits.keySet());
     }
 
+    public ArrayList<String> getExitDirectionsArrayList() {
+        return new ArrayList<>(game.getCurrentRoom().exits.keySet());
+    }
+
     public Room getExitFor(String direction) {
-        return exits.get(direction);
+        int roomId = exits.get(direction);
+        // TODO: Find a way to access a room by its id
     }
 }

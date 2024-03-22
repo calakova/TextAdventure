@@ -6,6 +6,8 @@ import at.bbrz.commands.Suicide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,9 +25,12 @@ public class SuicideTest {
         suicide = new Suicide(playerMock);
     }
 
-    @Test
-    void run() {
-        suicide.run();
+    @ParameterizedTest
+    @ValueSource(strings = {"", "!\"§²³@€$%&/()=?{[]}ß\\üäö<>|`´#'+*~,;.:-_^°",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"})
+    void run(String parameter) {
+        suicide.run(parameter);
         verify(playerMock).die();
     }
 }

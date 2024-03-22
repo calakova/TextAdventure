@@ -7,6 +7,8 @@ import at.bbrz.items.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
@@ -34,15 +36,18 @@ public class StatsTest {
         stats = new Stats(playerMock, armorSetMock, weaponMock, outputMock);
     }
 
-    @Test
-    void run() {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "!\"§²³@€$%&/()=?{[]}ß\\üäö<>|`´#'+*~,;.:-_^°",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"})
+    void run(String parameter) {
         when(playerMock.getName()).thenReturn("TestName");
         when(playerMock.getCurrentHP()).thenReturn(90);
         when(playerMock.getMaxHP()).thenReturn(100);
         when(armorSetMock.getDefence()).thenReturn(5);
         when(weaponMock.getAttack()).thenReturn(3);
 
-        stats.run();
+        stats.run(parameter);
 
         InOrder inOrder = inOrder(outputMock);
         inOrder.verify(outputMock, times(4))

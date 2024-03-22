@@ -12,7 +12,7 @@ public class Suicide implements Command {
     }
 
     @Override
-    public void run() {
+    public void run(String parameter) {
         player.die();
     }
 }

@@ -6,27 +6,41 @@ import at.bbrz.items.armor.*;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Game {
+public class Game extends Publisher {
     @Getter
-    @Setter
     private Room currentRoom;
     @Getter
     private Player player;
-    private CommandHandler commandHandler;
+    private final CommandHandler commandHandler;
     @Getter
     private final Output outputHandler;
     @Getter
     private final Input inputHandler;
+    private final JSONLoader JSONLoader;
+    private Item[] items;
+    private Armor[] armors;
+    private Weapon[] weapons;
+    private Room[] rooms;
     @Setter
     private boolean gameRunning = true;
 
-    public Game(Output outputHandler, Input inputHandler, CommandHandler commandHandler) {
+    public Game(Output outputHandler,
+                Input inputHandler,
+                CommandHandler commandHandler,
+                JSONLoader JSONLoader) {
         this.outputHandler = outputHandler;
         this.inputHandler = inputHandler;
         this.commandHandler = commandHandler;
+        this.JSONLoader = JSONLoader;
+    }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+        notifySubscribers(currentRoom);
     }
 
     public void init() {
+        loadJSONData();
         askForEnter();
         setupPlayer();
         setupRooms();
@@ -45,6 +59,22 @@ public class Game {
         }
     }
 
+    private void loadJSONData() {
+        // TODO: Figure out how to work with these arrays
+        items = JSONLoader.loadItems(
+                "C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                        "\\src\\main\\resources\\json\\items.json");
+        armors = JSONLoader.loadArmor(
+                "C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                        "\\src\\main\\resources\\json\\armor.json");
+        weapons = JSONLoader.loadWeapons(
+                "C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                        "\\src\\main\\resources\\json\\weapons.json");
+        rooms = JSONLoader.loadRooms(
+                "C:\\Users\\BBRZ\\IdeaProjects\\TextAdventure" +
+                        "\\src\\main\\resources\\json\\rooms.json");
+    }
+
     private void askForEnter() {
         outputHandler.printLine("Press Enter to start the game!", "green");
         inputHandler.getNextLine();
@@ -56,23 +86,22 @@ public class Game {
         ArmorSet armorSet = new ArmorSet(
                 new HeadArmor("Hat",
                         "A hat that has withstood the test of time. \n" +
-                                "Offers little to no defensive value",
+                                "Offers little to no defensive value.",
                         1),
                 new TorsoArmor("Jacket",
-                        "A somewhat new wool jacket",
+                        "A somewhat new wool jacket.",
                         2),
                 new LegArmor("Linen Pants",
                         "A nice pair of linen pants.",
                         1),
                 new FootArmor("Leather Shoes",
-                        "A worn pair of leather shoes",
+                        "A worn pair of leather shoes.",
                         1));
         this.player = new Player(
                 name,
                 armorSet,
                 new Weapon("Shortsword",
-                        "A shortwsword. \n" +
-                                "Rather weak, but better than nothing",
+                        "A shortwsword. \nRather weak, but better than nothing",
                         3),
                 outputHandler,
                 this);
@@ -80,14 +109,14 @@ public class Game {
     }
 
     private void setupRooms() {
-        Room home = new Room("Home", "A cozy hut in the middle of the woods.", this);
-        Room woods = new Room("The Woods", "The woods outside of your home.", this);
-        Room deepWoods = new Room("Deep Woods", "The deepest parts of the woods.", this);
-        Room swamp = new Room("The Swamp", "A treacherous swamp lies before you.", this);
-        Room hills = new Room("The Hills", "A hilly bit of land.", this);
-
-        Room[] rooms = {home, woods, deepWoods, swamp, hills};
-        addExitsToRooms(rooms);
+        for (Room room : rooms) {
+            room.setGame(this);
+        }
+        Room home = rooms[0];
+        Room woods = rooms[1];
+        Room deepWoods = rooms[2];
+        Room swamp = rooms[3];
+        Room hills = rooms[4];
 
         home.addItem(new Item("Torch",
                 "An unlit torch. \n" +
@@ -99,6 +128,7 @@ public class Game {
         this.currentRoom = home;
     }
 
+    /*
     private void addExitsToRooms(Room[] rooms) {
         Room home = rooms[0];
         Room woods = rooms[1];
@@ -116,14 +146,19 @@ public class Game {
         hills.addExit("W", woods);
     }
 
+     */
+
     private void setupCommands() {
-        this.commandHandler = new CommandHandler(outputHandler);
-        commandHandler.addCommand("move",
-                new Move(this, currentRoom, outputHandler, inputHandler));
         commandHandler.addCommand("exit", new Exit(this));
         commandHandler.addCommand("stats",
                 new Stats(player, player.getArmorSet(), player.getWeapon(), outputHandler));
         commandHandler.addCommand("suicide", new Suicide(player));
-        commandHandler.addCommand("look", new Look(currentRoom, outputHandler));
+
+        Move move = new Move(this, currentRoom, outputHandler);
+        commandHandler.addCommand("move", move);
+        subscribe(move);
+        Look look = new Look(currentRoom, outputHandler);
+        commandHandler.addCommand("look", look);
+        subscribe(look);
     }
 }
